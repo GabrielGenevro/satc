@@ -1,0 +1,40 @@
+<?php
+include "conexao.php";
+
+$avaliador_id = intval($_GET['avaliador_id']);
+
+// Busca a banca onde o avaliador está
+$query = "SELECT * FROM tabbanca
+		WHERE $avaliador_id IN (avaliador_interno, avaliador2, avaliador3, avaliador4) LIMIT 1";
+
+$resultBanca = mysqli_query($link, $query);
+
+if (mysqli_num_rows($resultBanca) == 0) {
+    echo "<p>Nenhuma banca encontrada.</p>";
+    exit;
+}
+
+$banca = mysqli_fetch_assoc($resultBanca);
+
+// Busca os avaliadores dessa banca
+$query = "SELECT id, nome FROM tabavaliador
+		WHERE id IN ({$banca['avaliador_interno']}, {$banca['avaliador2']}, {$banca['avaliador3']}, {$banca['avaliador4']})";
+
+$result = mysqli_query($link, $query);
+
+echo "<table border='1' cellpadding='5'>
+        <tr>
+            <th>ID</th>
+            <th>Avaliador</th>
+        </tr>";
+
+//mostra os avaliadores e seu id no front end
+while ($row = mysqli_fetch_assoc($result)) {
+    echo "<tr>
+            <td>{$row['id']}</td>
+            <td>{$row['nome']}</td>
+          </tr>";
+}
+
+echo "</table>";
+?>
