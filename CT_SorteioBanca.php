@@ -1,4 +1,5 @@
 <?php
+	/*
 	//inicia a sessão
 	session_start();
 	//se não estiver logado leva a tela de login
@@ -10,6 +11,7 @@
 			exit;
 		}
 	$siape = $_SESSION["siape"];
+	*/
 	include "cabecalho.php";
 	include "menu.php";
 
