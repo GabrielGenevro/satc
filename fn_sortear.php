@@ -321,41 +321,36 @@ let bancaAtual = null;
 // Sorteio
 function sortear() {
 	//verifica se há membros possiveis para sortear
-    if (((ext_area_sub.length + ext_area.length) < 3) || int_area.length < 1) {
-        document.getElementById("resultado").innerHTML = "Sem candidatos suficientes";
-        return;
-    }
+    if (((ext_area_sub.length + ext_area.length) < 3) || int_area.length < 1) 
+		{
+        	document.getElementById("resultado").innerHTML = "Sem candidatos suficientes";
+        	return;
+    	}
+	else
+		{
+			// presidente
+			let presidente = ext_area_sub[Math.floor(Math.random() * ext_area_sub.length)];
+			// pool externos, junta os membros externos somente com area e os com subarea e retira o predisente do sorteio
+			let pool = [...new Set([...ext_area_sub, ...ext_area])];
+			pool = pool.filter(x => x !== presidente);
+			// sorteia externo 1 e 2 (sem repetir entre eles)
+			let ext1 = pool[Math.floor(Math.random() * pool.length)];
+			let ext2;
+			do 
+				{
+					ext2 = pool[Math.floor(Math.random() * pool.length)];
+				} while (ext2 === ext1);
+			// interno
+			let interno = int_area[Math.floor(Math.random() * int_area.length)];
+			bancaAtual = {interno, presidente, ext1, ext2};
+			//mostra os ids
+			document.getElementById("resultado").innerHTML =
+				`Interno: ${interno}<br>
+				Presidente: ${presidente}<br>
+				Externo 1: ${ext1}<br>
+				Externo 2: ${ext2}`;
+		}
 
-    // presidente
-    let presidente = ext_area_sub[Math.floor(Math.random() * ext_area_sub.length)];
-
-    // pool externos
-    let pool = [...new Set([...ext_area_sub, ...ext_area])];
-    pool = pool.filter(x => x !== presidente);
-
-    if (pool.length < 2) {
-        document.getElementById("resultado").innerHTML = "Sem externos suficientes";
-        return;
-    }
-
-    // externo 1 e 2 (sem repetir entre eles)
-    let ext1 = pool[Math.floor(Math.random() * pool.length)];
-    let ext2;
-
-    do {
-        ext2 = pool[Math.floor(Math.random() * pool.length)];
-    } while (ext2 === ext1);
-
-    // interno
-    let interno = int_area[Math.floor(Math.random() * int_area.length)];
-
-    bancaAtual = {interno, presidente, ext1, ext2};
-
-    document.getElementById("resultado").innerHTML =
-        `Interno: ${interno}<br>
-         Presidente: ${presidente}<br>
-         Externo 1: ${ext1}<br>
-         Externo 2: ${ext2}`;
 }
 
 // recusar = resortear

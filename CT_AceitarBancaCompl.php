@@ -92,18 +92,24 @@
 					//verifica se foram encontrados os dados do avaliador
 					if($area)
 						{
+							$query_insert = "INSERT INTO tabbanca_blacklist (banca_id, avaliador_id)
+								VALUES ($banca_id, $avaliador)";
+							mysqli_query($link,$query_insert);
+
 										// ****Impedir de resortear o mesmo avaliador ou avaliadores que já recusaram a banca
 							//se for o avaliador interno obriga a ser o ifes dele no sorteio
 							if($coluna_encontrada == 'avaliador_interno')
 								{
 									$query = "SELECT id FROM tabavaliador WHERE area = '$area' AND subarea = '$subarea' AND ife = '$ifes' 
-											AND (situacao NOT IN ('Sorteado','Presidente','Em Banca') OR situacao IS NULL) ORDER BY RAND() LIMIT 1";
+											AND (situacao NOT IN ('Sorteado','Presidente','Em Banca') OR situacao IS NULL) 
+											AND id NOT IN ( SELECT avaliador_id FROM tabbanca_blacklist WHERE banca_id = $banca_id) ORDER BY RAND() LIMIT 1";
 								}
 							//se não for o avaliador interno exclui o ifes dele
 							else if ($coluna_encontrada != 'avaliador_interno')
 								{
 									$query = "SELECT id FROM tabavaliador WHERE area = '$area' AND subarea = '$subarea' AND ife != '$ifes' 
-											AND (situacao NOT IN ('Sorteado','Presidente','Em Banca') OR situacao IS NULL) ORDER BY RAND() LIMIT 1";													
+											AND (situacao NOT IN ('Sorteado','Presidente','Em Banca') OR situacao IS NULL)
+											AND id NOT IN ( SELECT avaliador_id FROM tabbanca_blacklist WHERE banca_id = $banca_id) ORDER BY RAND() LIMIT 1";													
 								}
 							$result = mysqli_query($link, $query);
 							$row = mysqli_fetch_assoc($result);
