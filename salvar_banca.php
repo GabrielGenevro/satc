@@ -38,9 +38,7 @@ try {
         throw new Exception("Algum avaliador já foi utilizado");
     }
 
-    // =======================
     // INSERT BANCA
-    // =======================
     $sql = "INSERT INTO tabbanca 
     (avaliador_interno, avaliador1, avaliador2, avaliador3, estado, resultado, instituto)
     VALUES 
@@ -48,18 +46,14 @@ try {
 
     mysqli_query($link, $sql);
 
-    // =======================
     // UPDATE AVALIADORES
-    // =======================
     mysqli_query($link, "
         UPDATE tabavaliador 
         SET situacao = 'Sorteado' 
         WHERE id IN ($ids)
     ");
 
-    // =======================
     // FINALIZA
-    // =======================
     mysqli_commit($link);
 
     echo "Banca salva com sucesso!";
